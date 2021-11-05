@@ -12,7 +12,7 @@ The package can be installed by adding `urbit_ex` to your list of dependencies i
 ```elixir
 def deps do
   [
-    {:urbit_ex, "~> 0.7.0"}
+    {:urbit_ex, "~> 0.7.2"}
   ]
 end
 ```
