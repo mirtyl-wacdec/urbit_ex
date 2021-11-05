@@ -61,7 +61,7 @@ defmodule UrbitEx.API.DM do
       API.evaluate(session, "`@ud`#{Utils.add_tilde(target)}") |> String.replace(".", "")
 
     json = GraphStore.send_dm(session.ship, target_num, text, custom)
-    body = Actions.poke(session.ship, "dm-hook", "graph-update-2", json)
+    body = Actions.poke(session.ship, "dm-hook", "graph-update-3", json)
     API.wrap_put(session, channel, [body])
   end
 

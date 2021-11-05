@@ -17,7 +17,7 @@ defmodule UrbitEx.API.Graph do
 
   def join_channel(session, resource) do
     json = GraphStore.join_resource(resource)
-    endpoint = "/spider/graph-view-action/graph-join/json.json"
+    endpoint = "/spider/landscape/graph-view-action/graph-join/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -29,7 +29,7 @@ defmodule UrbitEx.API.Graph do
 
   def leave_channel(session, resource) do
     json = GraphStore.leave_channel(resource)
-    endpoint = "/spider/graph-view-action/graph-leave/json.json"
+    endpoint = "/spider/landscape/graph-view-action/graph-leave/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -91,7 +91,7 @@ defmodule UrbitEx.API.Graph do
   end
 
   defp apply_channel_creation(session, json) do
-    endpoint = "/spider/graph-view-action/graph-create/json.json"
+    endpoint = "/spider/landscape/graph-view-action/graph-create/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -104,7 +104,7 @@ defmodule UrbitEx.API.Graph do
 
   def delete_channel(session, resource) do
     json = GraphStore.delete_channel(resource)
-    endpoint = "/spider/graph-view-action/graph-delete/json.json"
+    endpoint = "/spider/landscape/graph-view-action/graph-delete/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -118,7 +118,7 @@ defmodule UrbitEx.API.Graph do
 
   def enable_group_feed(session, group, permission) do
     json = GraphStore.enable_group_feed(group, permission)
-    endpoint = "/spider/graph-view-action/graph-create-group-feed/resource.json"
+    endpoint = "/spider/landscape/graph-view-action/graph-create-group-feed/resource.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -130,7 +130,7 @@ defmodule UrbitEx.API.Graph do
 
   def disable_group_feed(session, group) do
     json = GraphStore.disable_group_feed(group)
-    endpoint = "/spider/graph-view-action/graph-disable-group-feed/json.json"
+    endpoint = "/spider/landscape/graph-view-action/graph-disable-group-feed/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -157,7 +157,7 @@ defmodule UrbitEx.API.Graph do
   """
 
   def fetch_oldest(session, resource, opts \\ []),
-    do: fetch_siblings(session, resource, "", :newest, opts)
+    do: fetch_siblings(session, resource, "", :oldest, opts)
 
   @doc """
   Fetches nodes from a channel which are older than a given index.
@@ -178,8 +178,8 @@ defmodule UrbitEx.API.Graph do
   Eyre returns a 200 response.
   """
 
-  def fetch_younger_than(session, resource, index, opts \\ []),
-    do: fetch_siblings(session, resource, index, :younger, opts)
+  def fetch_newer_than(session, resource, index, opts \\ []),
+    do: fetch_siblings(session, resource, index, :newer, opts)
 
 
   def fetch_siblings(session, resource, index, type, opts) do
@@ -340,7 +340,7 @@ defmodule UrbitEx.API.Graph do
   # writing stuff
 
   def add_node(json, session) do
-    endpoint = "/spider/graph-update-2/graph-add-nodes/graph-view-action.json"
+    endpoint = "/spider/landscape/graph-update-3/graph-add-nodes/graph-view-action.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -417,7 +417,7 @@ defmodule UrbitEx.API.Graph do
   """
 
   def add_post(session, resource, title, text, custom \\ nil) do
-    endpoint = "/spider/graph-update-2/graph-add-nodes/graph-view-action.json"
+    endpoint = "/spider/landscape/graph-update-3/graph-add-nodes/graph-view-action.json"
     json = GraphStore.add_notebook_post(session.ship, resource, title, text, custom)
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
@@ -432,7 +432,7 @@ defmodule UrbitEx.API.Graph do
   """
 
   def add_comment(session, resource, node, text, custom \\ nil) do
-    endpoint = "/spider/graph-update-2/graph-add-nodes/graph-view-action.json"
+    endpoint = "/spider/landscape/graph-update-3/graph-add-nodes/graph-view-action.json"
     json = GraphStore.add_comment(session.ship, resource, node.post.index, text, custom)
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
@@ -450,7 +450,7 @@ defmodule UrbitEx.API.Graph do
     [post, _comments] = node.children
     new_index = increment_index(post)
     json = GraphStore.edit_post(session.ship, resource, new_index, title, text, custom)
-    endpoint = "/spider/graph-update-2/graph-add-nodes/graph-view-action.json"
+    endpoint = "/spider/landscape/graph-update-3/graph-add-nodes/graph-view-action.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -464,7 +464,7 @@ defmodule UrbitEx.API.Graph do
 
   def edit_comment(session, resource, node, text, custom \\ nil) do
     new_index = increment_index(node)
-    endpoint = "/spider/graph-update-2/graph-add-nodes/graph-view-action.json"
+    endpoint = "/spider/landscape/graph-update-3/graph-add-nodes/graph-view-action.json"
     json = GraphStore.edit_comment(session.ship, resource, new_index, text, custom)
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
@@ -489,7 +489,7 @@ defmodule UrbitEx.API.Graph do
 
   def delete_nodes(session, channel, resource, indices) do
     json = GraphStore.remove_node(resource, indices)
-    body = Actions.poke(session.ship, "graph-push-hook", "graph-update-2", json)
+    body = Actions.poke(session.ship, "graph-push-hook", "graph-update-3", json)
     API.wrap_put(session, channel, [body])
   end
 end

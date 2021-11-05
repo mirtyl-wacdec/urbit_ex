@@ -132,7 +132,7 @@ defmodule UrbitEx do
       %{app: "contact-pull-hook", path: "/nacks"},
       # %{app: "contact-pull-hook", path: "/all"},
       %{app: "dm-hook", path: "/updates"}
-      # %{app: "herm", path: "/session"}
+      # %{app: "herm", path: "/session/"}
     ]
   end
 end

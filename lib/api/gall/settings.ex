@@ -13,9 +13,9 @@ defmodule UrbitEx.API.Settings do
   `s3-store` precedede `settings-store` but it might be merged into it in the future.
   """
 
-  defp return(data) do 
-    case Jason.decode(data) do 
-      {:ok, json} -> 
+  defp return(data) do
+    case Jason.decode(data) do
+      {:ok, json} ->
          [key] = Map.keys(json)
          {:ok, json[key]}
       {:error, err} -> {:error, err}
@@ -37,8 +37,13 @@ defmodule UrbitEx.API.Settings do
   Fetches the value of a given bucket in your `settings-store`.
   Takes an UrbitEx.Session struct and a bucket string.
   """
-  def fetch_bucket(session, bucket) do
-    endpoint = "/~/scry/settings-store/bucket/#{bucket}.json"
+  def fetch_desk(session, desk) do
+    endpoint = "/~/scry/settings-store/desk/#{desk}.json"
+    {:ok, res} = Airlock.get(session.url <> endpoint, session.cookie)
+    return(res.body)
+  end
+  def fetch_bucket(session, desk, bucket) do
+    endpoint = "/~/scry/settings-store/bucket/#{desk}/#{bucket}.json"
     {:ok, res} = Airlock.get(session.url <> endpoint, session.cookie)
     return(res.body)
   end
@@ -48,8 +53,8 @@ defmodule UrbitEx.API.Settings do
   Takes an UrbitEx.Session struct, a bucket string and an entry string.
   """
 
-  def fetch_entry(session, bucket, entry) do
-    endpoint = "/~/scry/settings-store/entry/#{bucket}/#{entry}.json"
+  def fetch_entry(session, desk, bucket, entry) do
+    endpoint = "/~/scry/settings-store/entry/#{desk}/#{bucket}/#{entry}.json"
     {:ok, res} = Airlock.get(session.url <> endpoint, session.cookie)
     return(res.body)
   end
@@ -91,35 +96,35 @@ defmodule UrbitEx.API.Settings do
   """
 
   def hide_nicknames(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :hideNicknames, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :hideNicknames, boolean))
 
   @doc """
   Set to hide or not hide avatars on Landscape.
   Takes an UrbitEx. Session struct and a boolean.
   """
   def hide_avatars(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :hideAvatars, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :hideAvatars, boolean))
 
   @doc """
   Set to hide or not hide the counts of unread messages per group on Landscape.
   Takes an UrbitEx. Session struct and a boolean.
   """
   def hide_unreads(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :hideUnreads, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :hideUnreads, boolean))
 
   @doc """
   Set to hide or not hide the utlity tiles (Weather, Clock, etc.) on Landscape.
   Takes an UrbitEx. Session struct and a boolean.
   """
   def hide_utilities(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :hideUtilities, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :hideUtilities, boolean))
 
   @doc """
   Set to hide or not hide the group tiles on Landscape. If you really really like the weather and clock tiles.
   Takes an UrbitEx. Session struct and a boolean.
   """
   def hide_groups(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :hideGroups, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :hideGroups, boolean))
 
   @doc """
   Set to toggle whether to render images automatically on Landscape.
@@ -128,44 +133,44 @@ defmodule UrbitEx.API.Settings do
   Takes an UrbitEx. Session struct and a boolean.
   """
   def render_images(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :imageShown, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :imageShown, boolean))
 
   @doc """
   Set whether to render a media player for audio on Landscape.
   Takes an UrbitEx. Session struct and a boolean.
   """
   def play_audio(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :audioShown, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :audioShown, boolean))
 
   @doc """
   Set whether to render a media player for video on Landscape.
   Takes an UrbitEx. Session struct and a boolean.
   """
   def play_video(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :videoShown, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :videoShown, boolean))
 
   @doc """
   Set whether to render embedded content (Twitter links and other OEmbed content) on Landscape.
   Takes an UrbitEx. Session struct and a boolean.
   """
   def render_embeds(session, channel, boolean),
-    do: apply_changes(session, channel, put_entry(:calm, :oembedShown, boolean))
+    do: apply_changes(session, channel, put_entry(:landscape, :calm, :oembedShown, boolean))
 
   @doc """
   Sets the Landscape theme. Takes an UrbitEx.Session struct and a theme string.
   Default theme is light, unless "dark" is specified.
   """
   def theme(session, channel, theme),
-    do: apply_changes(session, channel, put_entry(:display, :theme, theme))
+    do: apply_changes(session, channel, put_entry(:landscape, :display, :theme, theme))
 
   @doc """
   Sets the Landscape background image. Takes an UrbitEx.Session struct and a url string.
   """
 
   def set_background_image(session, channel, url) do
-    json = put_entry(:display, :backgroundType, :url)
+    json = put_entry(:landscape, :display, :backgroundType, :url)
     apply_changes(session, channel, json)
-    json2 = put_entry(:display, :background, url)
+    json2 = put_entry(:landscape, :display, :background, url)
     apply_changes(session, channel, json2)
   end
 
@@ -174,9 +179,9 @@ defmodule UrbitEx.API.Settings do
   Color can be any css color string, Landscape appears to read it as is.
   """
   def set_background_color(session, channel, color) do
-    json = put_entry(:display, :backgroundType, :color)
+    json = put_entry(:landscape, :display, :backgroundType, :color)
     apply_changes(session, channel, json)
-    json2 = put_entry(:display, :background, color)
+    json2 = put_entry(:landscape, :display, :background, color)
     apply_changes(session, channel, json2)
   end
 
@@ -185,7 +190,7 @@ defmodule UrbitEx.API.Settings do
   """
 
   def remove_background(session, channel),
-    do: apply_changes(session, channel, put_entry(:display, :backgroundType, :none))
+    do: apply_changes(session, channel, put_entry(:landscape, :display, :backgroundType, :none))
 
   @doc """
   Adds your own category of setting to your Urbit settings-store.
@@ -193,8 +198,8 @@ defmodule UrbitEx.API.Settings do
   """
   ## TODO can't have whitespace in the names!! entries too!
   ## I mean you can set them up with whitespace but then they bugout on scrying
-  def add_custom_bucket(session, channel, bucket),
-    do: apply_changes(session, channel, put_bucket(bucket))
+  def add_custom_bucket(session, channel, desk, bucket),
+    do: apply_changes(session, channel, put_bucket(desk, bucket))
 
   @doc """
   Add your own setting to your Urbit settings-store under a given bucket.
@@ -203,22 +208,22 @@ defmodule UrbitEx.API.Settings do
   The setting stays there so you can read it later at your convenience and use it however you want.
   """
 
-  def add_custom_entry(session, channel, bucket, entry, value),
-    do: apply_changes(session, channel, put_entry(bucket, entry, value))
+  def add_custom_entry(session, channel, desk, bucket, entry, value),
+    do: apply_changes(session, channel, put_entry(desk, bucket, entry, value))
 
   @doc """
   Delete settings bucket. Takes an UrbitEx.Session struct, and a string for the bucket name you want to delete.
   """
 
-  def remove_bucket(session, channel, bucket),
-    do: apply_changes(session, channel, del_bucket(bucket))
+  def remove_bucket(session, channel, desk, bucket),
+    do: apply_changes(session, channel, del_bucket(desk, bucket))
 
   @doc """
   Delete settings entry. Takes an UrbitEx.Session struct,
   a string for the bucket, and a string for the entry you want to delete.
   """
-  def remove_entry(session, channel, bucket, entry),
-    do: apply_changes(session, channel, del_entry(bucket, entry))
+  def remove_entry(session, channel, desk, bucket, entry),
+    do: apply_changes(session, channel, del_entry(desk, bucket, entry))
 
   ## S3
   @doc """

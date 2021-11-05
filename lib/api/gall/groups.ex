@@ -63,7 +63,7 @@ defmodule UrbitEx.API.Groups do
 
   def leave(session, resource) do
     json = GroupStore.leave(resource)
-    endpoint = "/spider/group-view-action/group-leave/json.json"
+    endpoint = "/spider/landscape/group-view-action/group-leave/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -82,7 +82,7 @@ defmodule UrbitEx.API.Groups do
 
   def create(session, name, title, description, type, opts \\ []) do
     json = GroupStore.create(name, title, description, type, opts)
-    endpoint = "/spider/group-view-action/group-create/json.json"
+    endpoint = "/spider/landscape/group-view-action/group-create/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -101,7 +101,7 @@ defmodule UrbitEx.API.Groups do
   """
   def delete(session, resource) do
     json = GroupStore.delete(resource)
-    endpoint = "/spider/group-view-action/group-delete/json.json"
+    endpoint = "/spider/landscape/group-view-action/group-delete/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 
@@ -115,7 +115,7 @@ defmodule UrbitEx.API.Groups do
 
   def invite(session, resource, invitees, message) do
     json = GroupStore.invite(resource, invitees, message)
-    endpoint = "/spider/group-view-action/group-invite/json.json"
+    endpoint = "/spider/landscape/group-view-action/group-invite/json.json"
     Airlock.post(session.url <> endpoint, json, session.cookie)
   end
 

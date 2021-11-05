@@ -146,7 +146,7 @@ defmodule UrbitEx.API do
     Fetches the name of the ship running at a given URL.
     Takes a url string. Returns a string with the ship name or an error tuple.
   """
-  def shipname(url) do 
+  def shipname(url) do
     with {:ok, res } = HTTPoison.get(url <> "/who.json"),
          {:ok, json} = Jason.decode(res.body, keys: :atoms)
     do
@@ -164,7 +164,7 @@ defmodule UrbitEx.API do
   """
   def evaluate(session, code) do
     json = %{eval: code}
-    endpoint = "/spider/graph-view-action/graph-eval/tang.json"
+    endpoint = "/spider/landscape/graph-view-action/graph-eval/tang.json"
     {:ok, res} = Airlock.post(session.url <> endpoint, json, session.cookie)
     [[output]] = Jason.decode!(res.body)
     output
